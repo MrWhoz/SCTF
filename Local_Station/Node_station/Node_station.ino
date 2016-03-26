@@ -12,16 +12,18 @@
 #include <stdlib.h>
 #include <rgb_lcd.h>
 #include "WiFi.h"
+#include <PubSubClient.h>
 int sensorPin = A0;    // select the input pin for the potentiometer
 int sensorValue = 0;
-char ssid[] = "Hackathon 2016";     //  your network SSID (name) 
-char pass[] = "bd@hackathon";  // your network password
+char ssid[] = "sctf";     //  your network SSID (name) 
+char pass[] = "skynetrising";  // your network password
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
-
+float temper = 0;
+float humidity = 0;
 rgb_lcd lcd;
 
 const int colorR = 0;
-const int colorG = 0;
+const int colorG = 255;
 const int colorB = 0;
 
 void setup(){
@@ -57,7 +59,7 @@ void setup(){
 void loop()
 {
 
-   float temper = TH02.ReadTemperature(); 
+   temper = TH02.ReadTemperature(); 
    Serial.println("Temperature: ");   
    Serial.print(temper);
    Serial.println("C\r\n");
@@ -65,7 +67,7 @@ void loop()
    lcd.print(temper);
    
    
-   float humidity = TH02.ReadHumidity();
+   humidity = TH02.ReadHumidity();
    lcd.setCursor(8,0);
    lcd.print(humidity);
    
@@ -73,6 +75,32 @@ void loop()
    Serial.print(humidity);
    Serial.println("%\r\n");
 
+   sensorValue = analogRead(sensorPin);
+   lcd.setCursor(0,1);
+   lcd.print(sensorValue);
+
+  //String t = dtostrf(temper,1,4,buffer);
+  //char voltageMsg[25];
+//sprintf(voltageMsg, temper);
+
+   char buffer[5];
+  sprintf(buffer,"%f", temper);
+  String temp2 = String(buffer);
+  char buffer2[5];
+  sprintf(buffer2,"%f", humidity);
+  String humid2 = String (buffer2);
+char buffer3[5];
+   sprintf(buffer3,"%d", sensorValue);
+  String CO = String(buffer3); 
+  
+//  String url = "curl --data \'{\"temp\" : \""+temp2+"\"}\'  https://edisoniot.firebaseio.com/test.json";
+  String url = "curl --data \'{\"temp\" : \""+temp2+"\",\"humid\" : \""+humid2+"\",\"CO\" : \""+CO+"\" }\'  https://edisoniot.firebaseio.com/sctf.json";
+  char* s; 
+  s =&url[0];
+  
+ //system("curl --data \'{\"temp\" :"+t+" \"\"}\'  https://edisoniot.firebaseio.com/test.json");
+system(s);
+
    delay(1000);
 }
- 
+
