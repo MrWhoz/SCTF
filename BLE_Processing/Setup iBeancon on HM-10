@@ -1,0 +1,22 @@
+HM-10 and HM-11 iBeacons
+
+AT+RENEW 	 Restores factory defaults
+AT+RESET	Reboot HM-10
+AT Wait for OK
+AT+IBE0DE69E3A6
+AT+IBE19DD3EAEF
+AT+IBE20176D6C2
+AT+IBE35FAD011E
+AT+MARJ0x0001 Set iBeacon Major number to 0x0001 (hexadecimal)
+AT+MINO0xFA01 Set iBeacon Minor number to 0xFA01 (hexadecimal)
+AT+ADVI5 Set advertising interval to 5 (546.25 milliseconds) Apple standard is ADVI1
+AT+NAMEDOPEY Set HM-10 module name to DOPEY. Make this unique.
+AT+IBEA1 Enable iBeacon mode
+AT+RESET Reboot
+
+These are optional to save power:
+
+AT+ADTY3 Make non-connectable (save power)
+AT+DELO2 iBeacon broadcast-only (save power)
+AT+PWRM0 Enable auto-sleep. This reduces power from 8 to 0.18 mA
+AT+RESET Reboot
