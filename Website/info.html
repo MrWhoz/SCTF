@@ -1,0 +1,125 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script type="text/javascript">
+  var chart = null;
+  var dataJson = {};
+  var data = extractData(dataJson);
+  var updateFun = function (dataJson1){
+    data = extractData(dataJson1);
+    //console.log(data);
+    chart.options.data[0].dataPoints = data["CO"];
+    chart.options.data[1].dataPoints = data["humid"];
+    chart.options.data[2].dataPoints = data["temp"];
+    chart.render();
+  }.bind(this);
+  setInterval(function(){
+  $.ajax({
+    url: "https://edisoniot.firebaseio.com/SCTF.json",
+  })
+    .done(updateFun);
+  }, 500);
+
+  function extractData (dataJson){
+    var dataExtracted = {"CO" : [], "humid" : [], "temp" : []};
+    var count = 0;
+    for (var key in dataJson) {
+      // skip loop if the property is from prototype
+      if (!dataJson.hasOwnProperty(key)) continue;
+
+      var obj = dataJson[key];
+      //console.log(obj);
+      //console.log("X");
+      dataExtracted["CO"].push({x : count, y : Number(obj["CO"])});
+      dataExtracted["humid"].push({x : count, y : Number(obj["humid"])});
+      dataExtracted["temp"].push({x : count, y : Number(obj["temp"])});
+      count++;
+    }
+    return dataExtracted;
+  }
+  window.onload = function () {
+    chart = new CanvasJS.Chart("chartContainer",
+    {
+
+      title:{
+        text: "Smart City Traffic Flow",
+        fontSize: 40
+      },
+                        animationEnabled: true,
+      axisX:{
+
+        gridColor: "Silver",
+        tickColor: "silver",
+        valueFormatString: "DD/MMM"
+
+      },
+                        toolTip:{
+                          shared:true
+                        },
+      theme: "theme2",
+      axisY: {
+        gridColor: "Silver",
+        tickColor: "silver"
+      },
+      legend:{
+        verticalAlign: "center",
+        horizontalAlign: "right"
+      },
+      data: [
+      {
+        type: "line",
+        showInLegend: true,
+        lineThickness: 1,
+        name: "CO",
+        markerType: "square",
+        color: "#F08080",
+        dataPoints: data["CO"]
+      },
+      {
+        type: "line",
+        showInLegend: true,
+        name: "humid",
+        color: "#20B2AA",
+        lineThickness: 1,
+
+        dataPoints: data["humid"]
+      },
+      {
+        type: "line",
+        showInLegend: true,
+        name: "Temp",
+        color: "#0000FF",
+        lineThickness: 1,
+
+        dataPoints: data["temp"]
+      }
+
+
+      ],
+          legend:{
+            cursor:"pointer",
+            itemclick:function(e){
+              if (typeof(e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                e.dataSeries.visible = false;
+              }
+              else{
+                e.dataSeries.visible = true;
+              }
+              chart.render();
+            }
+          }
+    });
+
+//chart.render();
+
+}
+</script>
+<script type="text/javascript" src="script/canvasjs.min.js"></script>
+</head>
+<body>
+  <div id="chartContainer" style="height: 300px; width: 100%;">
+  </div>
+</body>
+</html>

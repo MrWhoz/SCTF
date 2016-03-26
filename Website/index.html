@@ -1,0 +1,134 @@
+<html>
+<head>
+<script src="jquery-2.2.0.min.js" ></script> 
+<style>
+	#map {
+		background-image: url("main.gif");
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		width: 800px;
+		height: 600px;
+		position: relative;
+		margin: auto;
+	}
+	.circle {
+		background-image: url("circle-green.png");
+		background-repeat: no-repeat;
+		background-size: 100% 100%;
+		width: 50px;
+		height: 50px;
+		position: absolute;
+	}
+	.circle.active {
+		background-image: url("circle-red.png");
+	}
+	.table {
+		margin: auto;
+	}
+	.table td {
+		width: 200px;
+	}
+</style>
+</head>
+<body>
+
+
+    <font ><marquee direction="left" style="background:orange">HACKATHON Binhh duong 2016 - WELCOME TO OUR PRODUCT</marquee></font>
+
+	<div id="map"></div>
+	<table border="1" class="table">
+		<tr>
+			<td>CO amount</td>
+			<td id="co">N/A</td>
+		</tr>
+		<tr>
+			<td>Temperature</td>
+			<td id="temp">N/A</td>
+		</tr>
+		<tr>
+			<td>Raining</td>
+			<td id="rain">N/A</td>
+		</tr>
+		<tr>
+			<td>Time</td>
+			<td id="time">N/A</td>
+		</tr>
+	</table>
+	
+	
+	
+<marquee behavior="alternate" width="10%">>></marquee>SKYNET<marquee behavior="alternate" width="10%"><< </marquee>
+	
+</body>
+<script>
+	var positions = [{
+		x: 100,
+		y: 240
+	}, {
+		x: 200,
+		y: 300
+	}, {
+		x: 300,
+		y: 400
+	}, {
+		x: 350,
+		y: 100
+	}, {
+		x: 720,
+		y: 440
+	}];
+
+	var target = 2;
+
+	for(var i = 0; i < positions.length; i++) {
+		var pos = positions[i];
+		$('#map').append('<a href="info.html"><div class="circle" style="left: '+ pos.x + 'px; top: ' + pos.y + 'px" data-index="' + i + '"></div></a>');
+	}
+
+
+	var co, temp, rain;
+	setInterval(function(){
+			$.get('line.php', function(value){
+				var arr=value.split(';');
+				co = arr[0];
+				temp = arr[1] / 10;
+				rain = (arr[2] == 1 ? "Yes" : "No");
+			});
+	},500);
+	var show = false;
+
+	setInterval(function(){
+		if (show) {
+			$('#co').text(co);	
+			$('#temp').text(temp);	
+			$('#rain').text(rain);	
+		} else {
+			$('#co').text('N/A');	
+			$('#temp').text('N/A');	
+			$('#rain').text('N/A');	
+		}
+	},500);
+
+	var today = new Date();
+document.getElementById('time').innerHTML=today.getHours()+ ":" + today.getMinutes() + "  - " +  (today.getMonth()+1) + "/" + today.getDate() + "/2016";
+	
+	
+	
+	
+	
+	$('.circle').click(function() {
+		$('.circle').removeClass('active');
+		$(this).addClass('active');
+		if ($(this).data('index') == target) {
+			show = true;
+		} else {
+			show = false;
+		}
+	})
+	
+</script>
+</html>
+
+
+
+
