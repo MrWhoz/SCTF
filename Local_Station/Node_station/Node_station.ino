@@ -1,10 +1,3 @@
-/*
- * IoT Project: City Live Sensor Mesh
- * Author: Tung
- * Target: read sensor then push to cloud
-*/
-
-
 #include <stdio.h>
 #include <TH02_dev.h>
 #include "Arduino.h"
@@ -15,8 +8,8 @@
 #include <PubSubClient.h>
 int sensorPin = A0;    // select the input pin for the potentiometer
 int sensorValue = 0;
-char ssid[] = "sctf";     //  your network SSID (name) 
-char pass[] = "skynetrising";  // your network password
+char ssid[] = "SCTF";     //  your network SSID (name) 
+char pass[] = "khongcobiet";  // your network password
 int status = WL_IDLE_STATUS;     // the Wifi radio's status
 float temper = 0;
 float humidity = 0;
@@ -94,7 +87,7 @@ char buffer3[5];
   String CO = String(buffer3); 
   
 //  String url = "curl --data \'{\"temp\" : \""+temp2+"\"}\'  https://edisoniot.firebaseio.com/test.json";
-  String url = "curl --data \'{\"temp\" : \""+temp2+"\",\"humid\" : \""+humid2+"\",\"CO\" : \""+CO+"\" }\'  https://edisoniot.firebaseio.com/sctf.json";
+  String url = "curl --data \'{\"Date\":\"26 Mar\",\"temp\" : \""+temp2+"\",\"humid\" : \""+humid2+"\",\"CO\" : \""+CO+"\" }\'  https://edisoniot.firebaseio.com/SCTF.json";
   char* s; 
   s =&url[0];
   
