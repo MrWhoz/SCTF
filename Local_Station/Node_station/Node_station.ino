@@ -42,13 +42,13 @@ void setup(){
 //    // wait 10 seconds for connection:
 //    delay(10000);
 //  }
-//    IPAddress ip = WiFi.localIP();
-//    Serial.print("IP Address: ");
-//  Serial.println(ip);
-//  Serial.println("Node Station now is Online");    
-//}
-//
+    IPAddress ip = WiFi.localIP();
+    Serial.print("IP Address: ");
+  Serial.println(ip);
+  Serial.println("Node Station now is Online");    
 }
+
+
 void loop()
 {
 
@@ -72,28 +72,27 @@ void loop()
    lcd.setCursor(0,1);
    lcd.print(sensorValue);
 
-  //String t = dtostrf(temper,1,4,buffer);
-  //char voltageMsg[25];
-//sprintf(voltageMsg, temper);
-
-   char buffer[5];
+  char buffer[5];
   sprintf(buffer,"%f", temper);
   String temp2 = String(buffer);
   char buffer2[5];
   sprintf(buffer2,"%f", humidity);
   String humid2 = String (buffer2);
-char buffer3[5];
-   sprintf(buffer3,"%d", sensorValue);
+  char buffer3[5];
+  sprintf(buffer3,"%d", sensorValue);
   String CO = String(buffer3); 
   
 //  String url = "curl --data \'{\"temp\" : \""+temp2+"\"}\'  https://edisoniot.firebaseio.com/test.json";
-//  String url = "curl --data \'{\"Date\":\"26 Mar\",\"temp\" : \""+temp2+"\",\"humid\" : \""+humid2+"\",\"CO\" : \""+CO+"\" }\'  https://edisoniot.firebaseio.com/SCTF.json";
-//  char* s; 
-//  s =&url[0];
+  String url = "curl --data \'{\"Date\":\"26 Mar\",\"temp\" : \""+temp2+"\",\"humid\" : \""+humid2+"\",\"CO\" : \""+CO+"\" }\'  https://edisoniot.firebaseio.com/SCTF.json";
+  char* s; 
+  s =&url[0];
 //  
 // //system("curl --data \'{\"temp\" :"+t+" \"\"}\'  https://edisoniot.firebaseio.com/test.json");
-//system(s);
-Serial1.write("012");
-   delay(1000);
+  system(s);
+  if (temper >26)
+    Serial1.write("202");
+  else
+    Serial1.write("222");
+  delay(1000);
 }
 
